@@ -29,7 +29,7 @@ func main() {
 	}
 
 	if flag.NArg() == 0 {
-		flag.PrintDefaults()
+		flag.Usage()
 		os.Exit(2)
 	}
 
@@ -44,7 +44,7 @@ func main() {
 	default:
 		fmt.Fprintf(flag.CommandLine.Output(), "unknown command %s\n", cmd)
 		flag.Usage()
-		os.Exit(1)
+		os.Exit(2)
 	}
 
 	if err != nil {
@@ -59,7 +59,7 @@ func runVersion() {
 func usage() {
 	w := flag.CommandLine.Output()
 
-	fmt.Fprintf(w, "Usage: %s <options> <commands> <args>\n\n", os.Args[0])
+	fmt.Fprintf(w, "Usage: %s [options] <commands> <args>\n\n", os.Args[0])
 
 	fmt.Fprintln(w, "Options")
 	flag.PrintDefaults()
