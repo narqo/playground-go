@@ -1,0 +1,5 @@
+# github.com/mailru/easyjson v0.7.1-0.20191009090205-6c0755d89d1e
+github.com/mailru/easyjson
+github.com/mailru/easyjson/buffer
+github.com/mailru/easyjson/jlexer
+github.com/mailru/easyjson/jwriter

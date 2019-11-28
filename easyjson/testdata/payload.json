@@ -1,0 +1,475 @@
+{
+  "bootTimestamp": 529139793,
+  "contextId": "651930d1-796c-4332-8054-44fe2bdf8a7c",
+  "contextName": "TIMER1",
+  "counters": {
+    "beforeEpsilon": {
+      "51": 1,
+      "52": 20,
+      "53": 20,
+      "54": 20,
+      "55": 2,
+      "56": 12,
+      "60": 200
+    },
+    "beforeSampleRateEnforcer": {
+      "51": 1,
+      "52": 10,
+      "53": 3,
+      "54": 1,
+      "55": 1,
+      "56": 1,
+      "60": 27
+    }
+  },
+  "dynamicKeyValues": [
+    [
+      "id",
+      "8e8e6228-d792-48be-8840-042e61f1b714"
+    ]
+  ],
+  "events": [
+    [
+      56,
+      32,
+      3.0
+    ],
+    [
+      55,
+      32,
+      5.0
+    ],
+    [
+      60,
+      47,
+      0.03978,
+      0.217464,
+      0.968377
+    ],
+    [
+      53,
+      84,
+      4.625,
+      -25.6875,
+      -32.8125
+    ],
+    [
+      52,
+      87,
+      0.18458338,
+      2.1367388,
+      9.591948
+    ],
+    [
+      54,
+      87,
+      0.0010646508,
+      0.0,
+      0.0
+    ],
+    [
+      51,
+      244,
+      0.6
+    ],
+    [
+      60,
+      127,
+      0.023627,
+      0.106988996,
+      0.984221
+    ],
+    [
+      52,
+      682,
+      0.15572846,
+      2.1494663,
+      9.511397
+    ],
+    [
+      53,
+      1474,
+      4.6875,
+      -24.625,
+      -33.0625
+    ],
+    [
+      52,
+      1476,
+      0.18403749,
+      2.1362312,
+      9.4696045
+    ],
+    [
+      52,
+      2469,
+      0.18057069,
+      2.146488,
+      9.584517
+    ],
+    [
+      52,
+      3264,
+      0.20408176,
+      2.1593974,
+      9.616005
+    ]
+  ],
+  "trigger": 3,
+  "apiKey": "xsssdu6eun0g",
+  "label": 0,
+  "metaData": {
+    "android": {
+      "build": {
+        "BOARD": "MAR",
+        "BOOTLOADER": "unknown",
+        "BRAND": "HUAWEI",
+        "CPU_ABI": "arm64-v8a",
+        "CPU_ABI2": "",
+        "DEVICE": "HWMAR",
+        "DISPLAY": "MAR-L21A 9.1.0.248(C431E6R2P3)",
+        "FINGERPRINT": "HUAWEI/MAR-LX1AEEA/HWMAR:9/HUAWEIMAR-L21A/9.1.0.248C431:user/release-keys",
+        "HARDWARE": "kirin710",
+        "HOST": "cn-central-1b-0e1ef6d311568602793088-3747463409-28s13",
+        "ID": "HUAWEIMAR-L21A",
+        "MANUFACTURER": "HUAWEI",
+        "MODEL": "MAR-LX1A",
+        "PRODUCT": "MAR-LX1AEEA",
+        "RADIO": "unknown",
+        "SUPPORTED_32_BIT_ABIS": [
+          "armeabi-v7a",
+          "armeabi"
+        ],
+        "SUPPORTED_64_BIT_ABIS": [
+          "arm64-v8a"
+        ],
+        "SUPPORTED_ABIS": [
+          "arm64-v8a",
+          "armeabi-v7a",
+          "armeabi"
+        ],
+        "TAGS": "release-keys",
+        "TIME": 1568607299000,
+        "TYPE": "user",
+        "USER": "test"
+      },
+      "screen": {
+        "height": 2312,
+        "width": 1080,
+        "xdpi": 415.636,
+        "ydpi": 416.487
+      },
+      "sensors": [
+        {
+          "id": 0,
+          "maxDelay": 200000,
+          "maxRange": 78.4532,
+          "minDelay": 4000,
+          "name": "accelerometer-bmi160",
+          "power": 0.23,
+          "resolution": 9.576806E-6,
+          "type": 1,
+          "vendor": "bosch",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 200000,
+          "maxRange": 2000.0,
+          "minDelay": 10000,
+          "name": "mag-akm09918",
+          "power": 6.8,
+          "resolution": 0.0625,
+          "type": 2,
+          "vendor": "akm",
+          "version": 1001
+        },
+        {
+          "id": 0,
+          "maxDelay": 20000,
+          "maxRange": 360.0,
+          "minDelay": 10000,
+          "name": "orientation",
+          "power": 13.0,
+          "resolution": 0.1,
+          "type": 3,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 0,
+          "maxRange": 10000.0,
+          "minDelay": 0,
+          "name": "als-B",
+          "power": 0.75,
+          "resolution": 1.0,
+          "type": 5,
+          "vendor": "B",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 200000,
+          "maxRange": 5.0,
+          "minDelay": 0,
+          "name": "proximity-ltr2568",
+          "power": 0.75,
+          "resolution": 5.0,
+          "type": 8,
+          "vendor": "liteon",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 200000,
+          "maxRange": 34.906586,
+          "minDelay": 4000,
+          "name": "bosch-bmi160",
+          "power": 6.1,
+          "resolution": 1.7453292E-5,
+          "type": 4,
+          "vendor": "bosch",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 20000,
+          "maxRange": 9.80665,
+          "minDelay": 10000,
+          "name": "gravity",
+          "power": 0.2,
+          "resolution": 0.15328126,
+          "type": 9,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 20000,
+          "maxRange": 78.4532,
+          "minDelay": 10000,
+          "name": "linear Acceleration",
+          "power": 0.2,
+          "resolution": 0.009576807,
+          "type": 10,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 20000,
+          "maxRange": 1.0,
+          "minDelay": 10000,
+          "name": "rotation Vector",
+          "power": 6.1,
+          "resolution": 5.9604645E-8,
+          "type": 11,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 0,
+          "maxRange": 1.0,
+          "minDelay": 0,
+          "name": "HALL sensor",
+          "power": 0.75,
+          "resolution": 1.0,
+          "type": 65538,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 200000,
+          "maxRange": 2000.0,
+          "minDelay": 16667,
+          "name": "uncalibrated Magnetic Field",
+          "power": 6.8,
+          "resolution": 0.0625,
+          "type": 14,
+          "vendor": "Asahi Kasei Microdevices",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 20000,
+          "maxRange": 1.0,
+          "minDelay": 10000,
+          "name": "game Rotation Vector",
+          "power": 6.1,
+          "resolution": 5.9604645E-8,
+          "type": 15,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 200000,
+          "maxRange": 34.906586,
+          "minDelay": 4000,
+          "name": "uncalibrated Gyroscope",
+          "power": 6.1,
+          "resolution": 1.7453292E-5,
+          "type": 16,
+          "vendor": "STMicroelectronics",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 0,
+          "maxRange": 2.14748365E9,
+          "minDelay": -1,
+          "name": "significant Motion",
+          "power": 0.23,
+          "resolution": 1.0,
+          "type": 17,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 0,
+          "maxRange": 2.14748365E9,
+          "minDelay": 0,
+          "name": "step counter",
+          "power": 0.23,
+          "resolution": 1.0,
+          "type": 19,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 200000,
+          "maxRange": 1.0,
+          "minDelay": 10000,
+          "name": "geomagnetic Rotation Vector",
+          "power": 6.1,
+          "resolution": 5.9604645E-8,
+          "type": 20,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 500000,
+          "maxRange": 1.0,
+          "minDelay": 10000,
+          "name": "phonecall sensor",
+          "power": 0.23,
+          "resolution": 1.0,
+          "type": 65544,
+          "vendor": "huawei",
+          "version": 1
+        },
+        {
+          "id": 0,
+          "maxDelay": 1000000,
+          "maxRange": 65535.0,
+          "minDelay": 500000,
+          "name": "RPC sensor",
+          "power": 5.0,
+          "resolution": 1.0,
+          "type": 65552,
+          "vendor": "huawei",
+          "version": 1
+        }
+      ],
+      "version": {
+        "BASE_OS": "HUAWEI/MAR-LX1AEEA/HWMAR:9/HUAWEIMAR-L21A/9.1.0.241C431:user/release-keys",
+        "CODENAME": "REL",
+        "INCREMENTAL": "9.1.0.248C431",
+        "PREVIEW_SDK_INT": 0,
+        "RELEASE": "9",
+        "SDK": "28",
+        "SDK_INT": 0,
+        "SECURITY_PATCH": "2019-09-01"
+      }
+    },
+    "config": {
+      "acceptableSensors": [
+        "TYPE_BATTERY_CHANGE",
+        "TYPE_ACCELEROMETER",
+        "TYPE_MAGNETIC_FIELD",
+        "TYPE_GYROSCOPE",
+        "TYPE_LIGHT",
+        "TYPE_PRESSURE",
+        "TYPE_AMBIENT_TEMPERATURE",
+        "TYPE_PROXIMITY",
+        "TYPE_STEP_DETECTOR",
+        "TYPE_GEOMAGNETIC_ROTATION_VECTOR"
+      ],
+      "boostEpsilonAccelerometer": 0.0075,
+      "boostEpsilonAmbientTemperature": 0.025,
+      "boostEpsilonBattery": 0.0,
+      "boostEpsilonGeomagneticRotationVector": 0.0025,
+      "boostEpsilonGyroscope": 0.00125,
+      "boostEpsilonLight": 0.5,
+      "boostEpsilonMagneticField": 0.25,
+      "boostEpsilonOrientation": 0.0,
+      "boostEpsilonPressure": 0.025,
+      "boostEpsilonProximity": 0.0,
+      "boostEpsilonStepDetector": 0.0,
+      "boostModeDurationMillis": 1000,
+      "boostSampleRateAccelerometerMillis": 250,
+      "boostSampleRateGeomagneticRotationVectorMillis": 250,
+      "boostSampleRateGyroscopeMillis": 250,
+      "boostSampleRateMagneticFieldMillis": 250,
+      "boostSampleRateMoveMillis": 25,
+      "boostSampleRateOrientationMillis": 250,
+      "circularCapacity": 10000,
+      "contextTrackAmount": {},
+      "contextTrackDuration": {},
+      "epsilonAccelerometer": 0.03,
+      "epsilonAmbientTemperature": 0.1,
+      "epsilonBattery": 0.0,
+      "epsilonGeomagneticRotationVector": 0.01,
+      "epsilonGyroscope": 0.005,
+      "epsilonLight": 2.0,
+      "epsilonMagneticField": 1.0,
+      "epsilonOrientation": 0.0,
+      "epsilonPressure": 0.1,
+      "epsilonProximity": 0.0,
+      "epsilonStepDetector": 0.0,
+      "extraTestMode": false,
+      "initKeyValues": [
+        [
+          "adjustVerName",
+          "4.18.1"
+        ],
+        [
+          "appVerName",
+          "3.10.1"
+        ]
+      ],
+      "label": 0,
+      "sampleRateAccelerometerMillis": 500,
+      "sampleRateGeomagneticRotationVectorMillis": 500,
+      "sampleRateGyroscopeMillis": 500,
+      "sampleRateMagneticFieldMillis": 500,
+      "sampleRateMoveMillis": 50,
+      "sampleRateOrientationMillis": 500,
+      "sessionMaxCapacity": 20000,
+      "sessionTimeoutDurationMillis": 3600000,
+      "showDebug": false,
+      "threadPriority": 10
+    },
+    "detection": {
+      "CPUVendor": "",
+      "ElfMachine": 40,
+      "durationMillis": 25,
+      "isVirtualBox": false,
+      "jreBitness": "aarch64",
+      "memu": 0,
+      "numCores": 8,
+      "totalMemory": "3801656 kB"
+    }
+  },
+  "sdkType": 1,
+  "sessionId": "3072f9e2-53cc-4497-bab2-91e6a13b354e",
+  "timestamp": 1572567442012,
+  "verCode": 37,
+  "verName": "1.9.2"
+}
