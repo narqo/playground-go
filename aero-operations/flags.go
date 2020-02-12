@@ -10,9 +10,15 @@ import (
 
 const aeroDefaultPort = 3000
 
-type hostsList []*aerospike.Host
+type hostsListValue []*aerospike.Host
 
-func (l hostsList) String() string {
+func newHostsListValue(value string, p *[]*aerospike.Host) *hostsListValue {
+	l := (*hostsListValue)(p)
+	l.Set(value)
+	return l
+}
+
+func (l hostsListValue) String() string {
 	var buf strings.Builder
 	for n, host := range l {
 		if n > 0 {
@@ -23,7 +29,7 @@ func (l hostsList) String() string {
 	return buf.String()
 }
 
-func (l *hostsList) Set(v string) (err error) {
+func (l *hostsListValue) Set(v string) (err error) {
 	h := strings.Split(v, ",")
 	list := make([]*aerospike.Host, len(h))
 	for i, hostport := range h {

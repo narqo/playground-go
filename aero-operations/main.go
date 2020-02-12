@@ -10,14 +10,14 @@ import (
 )
 
 var (
-	aeroHosts hostsList
+	aeroHosts []*aerospike.Host
 	aeroNs    string
 	aeroSet   string
 )
 
 func main() {
-	flag.Var(&aeroHosts, "aero.hosts", "aero hosts")
-	flag.StringVar(&aeroNs, "aero.namespace", "persistent00", "aero namespace")
+	flag.Var(newHostsListValue("127.0.0.1:3000", &aeroHosts), "aero.hosts", "aero host(s) as comma-separated list")
+	flag.StringVar(&aeroNs, "aero.ns", "persistent00", "aero namespace")
 	flag.StringVar(&aeroSet, "aero.set", "devices", "aero set")
 
 	flag.Parse()
