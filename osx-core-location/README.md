@@ -1,5 +1,9 @@
+# osx-core-location
+
 Retrieve macOS's current location from Go.
 
+![screenshot](./screenshot.png)
+
 Related:
-- [cgo](https://golang.org/cmd/cgo/#hdr-Passing_pointers), create Go packages that call C code
-- [`CLLocationManager`](https://developer.apple.com/documentation/corelocation/cllocationmanager?language=objc), the object that you use to delivery location-related events
+- [Documentation about cgo](https://golang.org/cmd/cgo), create Go packages that call C code
+- [Apple's docs about `CLLocationManager`](https://developer.apple.com/documentation/corelocation/cllocationmanager?language=objc), the object that delivers location-related events
