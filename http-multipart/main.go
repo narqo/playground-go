@@ -35,6 +35,9 @@ func run(ctx context.Context, args []string) error {
 	return http.ListenAndServe(addr, nil)
 }
 
+// Refer to
+// - https://developers.google.com/drive/api/v3/batch
+// - https://docs.microsoft.com/en-us/previous-versions/office/developer/exchange-server-2010/aa493937(v=exchg.140)
 func handleRoot(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.NotFound(w, r)
