@@ -1,0 +1,32 @@
+POST /batch HTTP/1.1
+Host: example.com
+Accept-Encoding: gzip, deflate, br
+Content-Type: multipart/mixed; boundary=g0x0g0x0
+Content-Length: 1761
+Connection: Close
+X-Forwarded-For: 10.10.10.1
+
+--g0x0g0x0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:76.0) Gecko/20100101 Firefox/76.0
+Content-Type: application/x-www-form-urlencoded
+X-Signature-v2: key=Desktop2x3, mac=84ad9918df3b895630c
+
+ip_address=172.56.1.1&payload={"foo":123}
+--g0x0g0x0
+User-Agent: Go-client-http/1.x
+Content-Type: application/http
+X-Signature-v2: key=Desktop2x3, mac=84ad9918df3b895630c
+
+POST /log?format=json&hasfast=true&authuser=0 HTTP/1.1
+Host: play.google.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:76.0) Gecko/20100101 Firefox/76.0
+Accept: */*
+Accept-Language: en-GB,en;q=0.7,ru;q=0.3
+Accept-Encoding: gzip, deflate, br
+Content-Type: application/x-www-form-urlencoded;charset=utf-8
+Origin: https://developers.google.com
+Referer: https://developers.google.com/drive/api/v3/batch
+Connection: Close
+
+[[1,null,null,null,null,null,null,null,null,null,[null,null,null,null,"en"]],407,[["1590254871371",null,[],null,null,null,null,"[331,1590254871371000,\"!Li2lLQxCKzg2QDEzi5xYAb81Vsh1_OoCAAAAYVIAAAANmQGL-G4qYPVGSnCi1KPTUKk8FrR7_wH5HV-LNjOip34fSSPZ9454LiatBM2-UUI5X8-Yxw-wj_QB2qt5BoKek8BGJhtXpZxr9aRnFtRoezGDIqDA3JjUB4fcfS30aFbO9vyQ3wap_0TOy3JJOM4tz9ZvP7x3o-DVCB2OI5ySWitnQ6Rz8hwgmSMKEzCuodi-e0bTUZ4nIzMpKYBGpi3HPWZRh2Zw-4TuXwEZdioM7zAreo7RgFQ_BVDBn2asd_8Y8oGucTYPWL3zKiBCT7xaxJhtRPewpMe8DvpBN5gASQ6qSujvq8Ts_MlepY_1XDpflW1N22nvOQ_d4Btvvxo1WQ133WIuzfdQiw5F2vlyhCR0jIAQBEyVk_E2wIWVk9DGY04EPmMxgQrFqW--P2-QROdLdVM-6jz6pfnWxZFzk5PBkgzAK5w2yCbj6CX00qTDpbujIDWTgzAKPSfoJ1NfIjn8dB2pR_T-oTjjSSWEFZt9LkZE9lT0VSiwtPNB3S2_OgY-iqdgbiE5L1rLKw8\",1702859116,false]",null,null,null,null,null,null,null,null,null,null,null,[],1,null,null,null,null,null,[]]],"1590254871372",[],null,null,null,null,null,null,null,null,0]
+--g0x0g0x0--
