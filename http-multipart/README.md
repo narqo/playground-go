@@ -9,5 +9,5 @@ $ go run ./ -addr=127.0.0.1:8080
 2. Send example request
 
 ```
-cat example.http | nc 127.0.0.1 8080
+nc 127.0.0.1 8080 <example.http
 ```

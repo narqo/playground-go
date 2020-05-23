@@ -2,7 +2,7 @@ POST /batch HTTP/1.1
 Host: example.com
 Accept-Encoding: gzip, deflate, br
 Content-Type: multipart/mixed; boundary=g0x0g0x0
-Content-Length: 1761
+Content-Length: 1759
 Connection: Close
 X-Forwarded-For: 10.10.10.1
 
