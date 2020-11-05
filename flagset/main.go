@@ -5,11 +5,14 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 type Config struct {
 	WorkTree  string
 	Namespace string
+
+	Branch []string
 }
 
 func main() {
@@ -18,6 +21,7 @@ func main() {
 	var conf Config
 	flag.StringVar(&conf.WorkTree, "work-tree", "", "Set the path to the working tree.")
 	flag.StringVar(&conf.Namespace, "namespace", "", "Set namespace.")
+	flag.Var((*stringsValue)(&conf.Branch), "branch", "Set branch or branches.")
 
 	flag.Usage = usage
 
@@ -67,4 +71,24 @@ func usage() {
 	fmt.Fprintln(w, "\nCommands")
 	fmt.Fprintln(w, "  add\n\tAdd command.")
 	fmt.Fprintln(w, "  archive\n\tArchive command.")
+}
+
+type stringsValue []string
+
+func (ss stringsValue) Get() interface{} {
+	return ss
+}
+
+func (ss *stringsValue) Set(s string) error {
+	for _, v := range strings.Split(s, ",") {
+		*ss = append(*ss, strings.TrimSpace(v))
+	}
+	return nil
+}
+
+func (ss stringsValue) String() string {
+	if ss == nil {
+		return ""
+	}
+	return strings.Join(ss, ",")
 }
