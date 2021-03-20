@@ -1,0 +1,62 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+	"time"
+)
+
+func main() {
+	setupApp()
+	http.ListenAndServe(":8080", nil)
+}
+
+func setupApp() {
+	Handle("/event", EventHandler)
+	Handle("/session", SessionHandler)
+}
+
+type Session struct {
+	AppToken    string    `form:"app_token"`
+	Environment string    `form:"environment"`
+	CreatedAt   time.Time `form:"created_at"`
+	ReceivedAt  time.Time `form:"received_at"`
+}
+
+func SessionHandler(w http.ResponseWriter, r *http.Request, form FormData[Session]) error {
+	session := form.Into()
+	_, err := fmt.Fprintf(w, "session(%T): %v", session, session)
+	return err
+}
+
+type Event struct {
+	AppToken    string
+	EventToken  string
+	Environment string
+	CreatedAt   time.Time
+	ReceivedAt  time.Time
+}
+
+func EventHandler(w http.ResponseWriter, r *http.Request, form FormData[Event]) error {
+	event := form.Into()
+	_, err := fmt.Fprintf(w, "event(%T): %v", event, event)
+	return err
+}
+
+type sdkActivity interface {
+	type Event, Session
+}
+
+// q := `app_token=abc123&token=event_token&created_at=2021-03-21T11:00:00.000Z`
+func parseQuery[T sdkActivity](q string, v *T) error {
+	vals, _ := url.ParseQuery(q)
+	_ = vals
+
+	if vv, ok := (interface{})(v).(FromQuery); ok {
+		vv.FromQuery(vals)
+		return nil
+	}
+
+	return nil
+}

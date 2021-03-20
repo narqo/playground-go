@@ -1,0 +1,59 @@
+package main
+
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+)
+
+// XXX any is a build-in type
+type any interface{}
+
+type FormData[T any] struct {
+	data T
+}
+
+func (fd *FormData[T]) ParseQuery(vals url.Values) error {
+	if vv, ok := (interface{})(fd.data).(FromQuery); ok {
+		return vv.FromQuery(vals)
+	}
+
+	return nil
+}
+
+func (fd FormData[T]) Into() T {
+	return fd.data
+}
+
+type Into[T any] interface {
+	Into() T
+}
+
+type FromQuery interface {
+	FromQuery(url.Values) error
+}
+
+type HandlerFunc[T any] func(w http.ResponseWriter, r *http.Request, form FormData[T]) error
+
+func (h HandlerFunc[T]) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if err := h.handle(w, r); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func (h HandlerFunc[T]) handle(w http.ResponseWriter, r *http.Request) error {
+	if err := r.ParseForm(); err != nil {
+		return fmt.Errorf("parse form: %w", err)
+	}
+
+	var form FormData[T]
+	if err := form.ParseQuery(r.Form); err != nil {
+		return fmt.Errorf("form(%T) parse query: %w", form, err)
+	}
+
+	return h(w, r, form)
+}
+
+func Handle[T any](path string, handler HandlerFunc[T]) {
+	http.Handle(path, handler)
+}
