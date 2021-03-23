@@ -33,8 +33,8 @@ func ParseQuery(vals url.Values, i interface{}) error {
 			continue
 		}
 		field := rv.Field(desc.Index)
-		if err := desc.parse(k, vals, field); err != nil {
-			return fmt.Errorf("field descriptor: parse key %s for %v: %w", k, desc, err)
+		if err := desc.setField(vals, field); err != nil {
+			return fmt.Errorf("field descriptor: setField key %s for %v: %w", k, desc, err)
 		}
 	}
 
@@ -47,13 +47,8 @@ type fieldDesc struct {
 	Index int
 }
 
-func (d *fieldDesc) parse(k string, vals url.Values, field reflect.Value) error {
-	key := d.Key
-	if key == "-" {
-		return nil
-	}
-
-	val := vals.Get(k)
+func (d *fieldDesc) setField(vals url.Values, field reflect.Value) error {
+	val := vals.Get(d.Key)
 	if val == "" {
 		return nil
 	}
@@ -96,6 +91,9 @@ func typeFields(t reflect.Type) fieldsDesc {
 			Key:   ftyp.Tag.Get("form"),
 			Name:  ftyp.Name,
 			Index: i,
+		}
+		if desc.Key == "-" {
+			continue
 		}
 		if desc.Key == "" {
 			desc.Key = desc.Name
