@@ -1,0 +1,118 @@
+package main
+
+import (
+	"fmt"
+	"net/url"
+	"reflect"
+	"strconv"
+	"sync"
+)
+
+type FromQuery interface {
+	FromQuery(url.Values) error
+}
+
+func ParseQuery(vals url.Values, i interface{}) error {
+	rv := reflect.ValueOf(i)
+	if rv.Kind() != reflect.Ptr || rv.IsNil() {
+		return fmt.Errorf("invalid receiver kind %q", rv.Kind())
+	}
+	rv = rv.Elem()
+	if rv.Kind() != reflect.Struct {
+		return fmt.Errorf("invalid receiver kind %q", rv.Kind())
+	}
+
+	fields := cachedTypeFields(rv.Type())
+
+	for k := range vals {
+		var desc *fieldDesc
+		if n, ok := fields.nameIndex[k]; ok {
+			desc = &fields.list[n]
+		}
+		if desc == nil {
+			continue
+		}
+		field := rv.Field(desc.Index)
+		if err := desc.parse(k, vals, field); err != nil {
+			return fmt.Errorf("field descriptor: parse key %s for %v: %w", k, desc, err)
+		}
+	}
+
+	return nil
+}
+
+type fieldDesc struct {
+	Key   string
+	Name  string
+	Index int
+}
+
+func (d *fieldDesc) parse(k string, vals url.Values, field reflect.Value) error {
+	key := d.Key
+	if key == "-" {
+		return nil
+	}
+
+	val := vals.Get(k)
+	if val == "" {
+		return nil
+	}
+
+	switch field.Kind() {
+	case reflect.String:
+		field.SetString(val)
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		v, err := strconv.ParseInt(val, 0, field.Type().Bits())
+		if err != nil {
+			return err
+		}
+		field.SetInt(v)
+	case reflect.Bool:
+		if val == "1" || val == "true" || val == "yes" {
+			field.SetBool(true)
+		}
+	default:
+		return fmt.Errorf("unsuppored field %s(%s)", d.Name, field.Kind())
+	}
+
+	return nil
+}
+
+type fieldsDesc struct {
+	list      []fieldDesc
+	nameIndex map[string]int
+}
+
+func typeFields(t reflect.Type) fieldsDesc {
+	n := t.NumField()
+	fields := fieldsDesc{
+		list:      make([]fieldDesc, 0, n),
+		nameIndex: make(map[string]int, n),
+	}
+	for i := 0; i < n; i++ {
+		ftyp := t.Field(i)
+
+		desc := fieldDesc{
+			Key:   ftyp.Tag.Get("form"),
+			Name:  ftyp.Name,
+			Index: i,
+		}
+		if desc.Key == "" {
+			desc.Key = desc.Name
+		}
+		fields.list = append(fields.list, desc)
+		fields.nameIndex[desc.Key] = i
+	}
+	return fields
+}
+
+var fieldCache sync.Map // map[reflect.Type]fieldsDesc
+
+// cachedTypeFields is like typeFields but uses a cache to avoid repeated work.
+func cachedTypeFields(t reflect.Type) fieldsDesc {
+	if f, ok := fieldCache.Load(t); ok {
+		return f.(fieldsDesc)
+	}
+	f, _ := fieldCache.LoadOrStore(t, typeFields(t))
+	return f.(fieldsDesc)
+}

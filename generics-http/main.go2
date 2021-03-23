@@ -2,14 +2,14 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"net/http"
-	"net/url"
 	"time"
 )
 
 func main() {
 	setupApp()
-	http.ListenAndServe(":8080", nil)
+	http.ListenAndServe("localhost:8080", nil)
 }
 
 func setupApp() {
@@ -20,30 +20,35 @@ func setupApp() {
 type Session struct {
 	AppToken    string    `form:"app_token"`
 	Environment string    `form:"environment"`
-	CreatedAt   time.Time `form:"created_at"`
-	ReceivedAt  time.Time `form:"received_at"`
+	CreatedAt   time.Time `form:"-"`
+	ReceivedAt  time.Time `form:"-"`
 }
 
 func SessionHandler(w http.ResponseWriter, r *http.Request, form FormData[Session]) error {
-	session := form.Into()
-	_, err := fmt.Fprintf(w, "session(%T): %v", session, session)
-	return err
+	return writef(w, "session", form)
 }
 
 type Event struct {
-	AppToken    string
-	EventToken  string
-	Environment string
-	CreatedAt   time.Time
-	ReceivedAt  time.Time
+	AppToken    string    `form:"app_token"`
+	EventToken  string    `form:"event_token"`
+	Environment string    `form:"environment"`
+	CreatedAt   time.Time `form:"-"`
+	ReceivedAt  time.Time `form:"-"`
 }
 
 func EventHandler(w http.ResponseWriter, r *http.Request, form FormData[Event]) error {
-	event := form.Into()
-	_, err := fmt.Fprintf(w, "event(%T): %v", event, event)
+	if form.AppToken == "abc123" {
+		return writef(w, "event(abc123)", form)
+	}
+	return writef(w, "event", form)
+}
+
+func writef[T any](w io.Writer, prefix string, form FormData[T]) error {
+	_, err := fmt.Fprintf(w, "%s(%T): %+v", prefix, form.T, form.T)
 	return err
 }
 
+/*
 type sdkActivity interface {
 	type Event, Session
 }
@@ -60,3 +65,4 @@ func parseQuery[T sdkActivity](q string, v *T) error {
 
 	return nil
 }
+*/

@@ -10,27 +10,18 @@ import (
 type any interface{}
 
 type FormData[T any] struct {
-	data T
+	T
 }
 
 func (fd *FormData[T]) ParseQuery(vals url.Values) error {
-	if vv, ok := (interface{})(fd.data).(FromQuery); ok {
+	if vv, ok := (interface{})(fd.T).(FromQuery); ok {
 		return vv.FromQuery(vals)
 	}
-
-	return nil
+	return ParseQuery(vals, &fd.T)
 }
 
-func (fd FormData[T]) Into() T {
-	return fd.data
-}
-
-type Into[T any] interface {
-	Into() T
-}
-
-type FromQuery interface {
-	FromQuery(url.Values) error
+func (fd FormData[T]) Get() T {
+	return fd.T
 }
 
 type HandlerFunc[T any] func(w http.ResponseWriter, r *http.Request, form FormData[T]) error

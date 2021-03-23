@@ -1,0 +1,28 @@
+package main
+
+import (
+	"net/url"
+	"testing"
+)
+
+type TestFormData struct {
+	TestSpec
+}
+
+type TestSpec struct {
+	Foo string `form:"foo"`
+}
+
+func TestParseQuery(t *testing.T) {
+	var fd TestFormData
+	vals := url.Values{
+		"foo": []string{"bar"},
+	}
+	err := ParseQuery(vals, &fd.TestSpec)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if want := "bar"; fd.Foo != want {
+		t.Fatalf("want %s, got %+v", want, fd)
+	}
+}
