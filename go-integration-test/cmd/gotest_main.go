@@ -17,8 +17,12 @@ import (
 func main() {
 	ctx := context.Background()
 
-	file := flag.String("file", "docker-compose.yml", "Compore configuration files.")
-	envFile := flag.String("env-file", "", "Environment file.")
+	var (
+		composeFiles []string
+		envFile      string
+	)
+	flag.Var((*stringsValue)(&composeFiles), "compose-file", "`list` of compose configuration files")
+	flag.StringVar(&envFile, "env-file", "", "environment file")
 
 	flag.Parse()
 
@@ -26,8 +30,8 @@ func main() {
 		log.Fatal("nothing to run")
 	}
 
-	if err := setupEnv(ctx, *file, *envFile); err != nil {
-		log.Fatal(err)
+	if err := setupEnv(ctx, composeFiles, envFile); err != nil {
+		log.Fatalf("setup env: %s", err)
 	}
 
 	args := flag.Args()
@@ -39,31 +43,25 @@ func main() {
 	}
 }
 
-func setupEnv(ctx context.Context, file, envFile string) error {
-	file, err := filepath.Abs(file)
-	if err != nil {
-		return err
+func setupEnv(ctx context.Context, composeFiles []string, envFile string) error {
+	args := []string{"docker", "compose"}
+	if len(composeFiles) != 0 {
+		for i := range composeFiles {
+			var err error
+			composeFiles[i], err = filepath.Abs(composeFiles[i])
+			if err != nil {
+				return err
+			}
+		}
+
+		files := strings.Join(composeFiles, ",")
+		args = append(args, "--file", files)
 	}
-	cmd := exec.CommandContext(ctx,
-		"docker", "compose", "-f", file, "config",
-		"--format", "json",
-	)
+	args = append(args, "ps", "--format", "json")
+	cmd := exec.CommandContext(ctx, args[0], args[1:]...)
 	out, err := cmd.Output()
 	if err != nil {
-		return err
-	}
-	var conf Config
-	if err := json.Unmarshal(out, &conf); err != nil {
-		return err
-	}
-
-	cmd = exec.CommandContext(ctx,
-		"docker", "compose", "-f", file, "ps",
-		"--format", "json",
-	)
-	out, err = cmd.Output()
-	if err != nil {
-		return err
+		return fmt.Errorf("exec command %v: %w", args, err)
 	}
 	var cs []Container
 	if err := json.Unmarshal(out, &cs); err != nil {
@@ -81,7 +79,7 @@ func setupEnv(ctx context.Context, file, envFile string) error {
 
 	envMap, err := readEnvFile(envFile, pat)
 	if err != nil {
-		return err
+		return fmt.Errorf("read env file %q: %w", envFile, err)
 	}
 
 	for key, val := range envMap {
@@ -111,6 +109,7 @@ func readEnvFile(envFile string, pat map[string]string) (map[string]string, erro
 			continue
 		}
 		if len(line) >= 1 {
+			// skip comments
 			if bytes.HasPrefix(line, []byte{'/', '/'}) || line[0] == '#' {
 				continue
 			}
