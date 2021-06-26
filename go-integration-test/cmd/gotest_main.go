@@ -50,7 +50,7 @@ func setupEnv(ctx context.Context, composeFiles []string, envFile string) error 
 			var err error
 			composeFiles[i], err = filepath.Abs(composeFiles[i])
 			if err != nil {
-				return err
+				return fmt.Errorf("get absolute file path: %w", err)
 			}
 		}
 
@@ -68,16 +68,16 @@ func setupEnv(ctx context.Context, composeFiles []string, envFile string) error 
 		return err
 	}
 
-	pat := make(map[string]string)
+	replaces := make(map[string]string)
 	for _, c := range cs {
 		for _, pub := range c.Publishers {
 			from := fmt.Sprintf("%s:%d", c.Service, pub.TargetPort)
 			to := fmt.Sprintf("127.0.0.1:%d", pub.PublishedPort)
-			pat[from] = to
+			replaces[from] = to
 		}
 	}
 
-	envMap, err := readEnvFile(envFile, pat)
+	envMap, err := readEnvFile(envFile, replaces)
 	if err != nil {
 		return fmt.Errorf("read env file %q: %w", envFile, err)
 	}
@@ -89,7 +89,7 @@ func setupEnv(ctx context.Context, composeFiles []string, envFile string) error 
 	return nil
 }
 
-func readEnvFile(envFile string, pat map[string]string) (map[string]string, error) {
+func readEnvFile(envFile string, replaces map[string]string) (map[string]string, error) {
 	envMap := make(map[string]string)
 
 	if envFile == "" {
@@ -117,11 +117,11 @@ func readEnvFile(envFile string, pat map[string]string) (map[string]string, erro
 
 		kv := bytes.SplitN(line, []byte{'='}, 2)
 		if len(kv) != 2 {
-			return nil, fmt.Errorf("malformed file: %s", line)
+			return nil, fmt.Errorf("malformed line: %s", line)
 		}
 		key, val := kv[0], string(kv[1])
 
-		for from, to := range pat {
+		for from, to := range replaces {
 			val = strings.ReplaceAll(val, from, to)
 		}
 
@@ -134,6 +134,7 @@ func readEnvFile(envFile string, pat map[string]string) (map[string]string, erro
 	return envMap, nil
 }
 
+/*
 type Config struct {
 	Services map[string]Service `json:"services"`
 }
@@ -148,6 +149,7 @@ type Port struct {
 	Target   int    `json:"target"`
 	Protocol string `json:"protocol"`
 }
+*/
 
 type Container struct {
 	ID         string
