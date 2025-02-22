@@ -6,7 +6,6 @@ import (
 	"net"
 	"sync"
 	"testing"
-	"time"
 )
 
 func TestListener_AcceptConnect(t *testing.T) {
@@ -15,12 +14,12 @@ func TestListener_AcceptConnect(t *testing.T) {
 		l.Close()
 	})
 
-	acceptDone := make(chan struct{})
+	acceptErrs := make(chan error, 1)
 	var serverConn net.Conn
-	var acceptErr error
 	go func() {
-		serverConn, acceptErr = l.Accept()
-		close(acceptDone)
+		var err error
+		serverConn, err = l.Accept()
+		acceptErrs <- err
 	}()
 
 	clientConn, err := l.Connect()
@@ -28,10 +27,9 @@ func TestListener_AcceptConnect(t *testing.T) {
 		t.Fatalf("Connect failed: %v", err)
 	}
 
-	// Wait for accept to complete
-	<-acceptDone
-	if acceptErr != nil {
-		t.Fatalf("Accept failed: %v", acceptErr)
+	// Wait until the accept goroutine completes
+	if err := <-acceptErrs; err != nil {
+		t.Fatalf("Accept failed: %v", err)
 	}
 
 	t.Cleanup(func() {
@@ -48,7 +46,7 @@ func TestListener_AcceptConnect(t *testing.T) {
 	buf := make([]byte, len(testData))
 	n, err := io.ReadFull(serverConn, buf)
 	if err != nil {
-		t.Fatalf("Read failed: %v", err)
+		t.Fatalf("Read from server connection failed: %v", err)
 	}
 	if n != len(testData) {
 		t.Errorf("Read %d bytes, want %d", n, len(testData))
@@ -75,42 +73,6 @@ func TestListener_Close(t *testing.T) {
 	_, err = l.Connect()
 	if !errors.Is(err, net.ErrClosed) {
 		t.Errorf("Connect after close got error %v, want %v", err, net.ErrClosed)
-	}
-}
-
-func TestListener_AcceptTimeout(t *testing.T) {
-	l := NewListener()
-
-	// Create a channel to signal the accept goroutine is running
-	accepting := make(chan struct{})
-	acceptDone := make(chan error, 1)
-
-	// Start an accept operation
-	go func() {
-		close(accepting) // Signal that we're about to call Accept
-		conn, err := l.Accept()
-		if conn != nil {
-			conn.Close()
-		}
-		acceptDone <- err
-	}()
-
-	// Wait for the accept goroutine to start
-	<-accepting
-
-	// Close the listener
-	if err := l.Close(); err != nil {
-		t.Errorf("Close failed: %v", err)
-	}
-
-	// Wait for accept to complete
-	select {
-	case err := <-acceptDone:
-		if err != net.ErrClosed {
-			t.Errorf("Accept after close got error %v, want %v", err, net.ErrClosed)
-		}
-	case <-time.After(time.Second):
-		t.Error("Accept did not return after listener close")
 	}
 }
 

@@ -9,29 +9,49 @@ import (
 	"testing/synctest"
 )
 
-func TestListener_closeDuringConnect(t *testing.T) {
+func TestListener_CloseDuringAccept(t *testing.T) {
 	synctest.Run(func() {
-		testListener_closeDuringConnect(t)
+		l := NewListener()
+
+		errs := make(chan error, 1)
+		go func() {
+			_, err := l.Accept()
+			errs <- err
+		}()
+
+		// Wait for the accept goroutine to block the bubble
+		synctest.Wait()
+
+		// Close the listener
+		if err := l.Close(); err != nil {
+			t.Errorf("Close listener failed: %v", err)
+		}
+
+		if err := <-errs; !errors.Is(err, net.ErrClosed) {
+			t.Errorf("blocked Accept got error %v, want %v", err, net.ErrClosed)
+		}
 	})
 }
 
-func testListener_closeDuringConnect(t *testing.T) {
-	l := NewListener()
+func TestListener_CloseDuringConnect(t *testing.T) {
+	synctest.Run(func() {
+		l := NewListener()
 
-	connectErrs := make(chan error, 1)
-	go func() {
-		_, err := l.Connect()
-		connectErrs <- err
-	}()
+		errs := make(chan error, 1)
+		go func() {
+			_, err := l.Connect()
+			errs <- err
+		}()
 
-	// Wait for the goroutines in the bubble to block
-	synctest.Wait()
+		// Wait for the connect goroutine to block the bubble
+		synctest.Wait()
 
-	if err := l.Close(); err != nil {
-		t.Errorf("Close listener failed: %v", err)
-	}
+		if err := l.Close(); err != nil {
+			t.Errorf("Close listener failed: %v", err)
+		}
 
-	if err := <-connectErrs; !errors.Is(err, net.ErrClosed) {
-		t.Errorf("blocked Connect got error %v, want %v", err, net.ErrClosed)
-	}
+		if err := <-errs; !errors.Is(err, net.ErrClosed) {
+			t.Errorf("blocked Connect got error %v, want %v", err, net.ErrClosed)
+		}
+	})
 }
