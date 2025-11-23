@@ -1,0 +1,53 @@
+logging {
+    //level = "debug"
+}
+
+local.file_match "logs" {
+	path_targets = [
+		{"__path__" = "/tmp/logs/*.log"},
+	]
+}
+
+loki.source.file "logs" {
+	targets    = local.file_match.logs.targets
+	forward_to = [loki.process.logs.receiver]
+}
+
+loki.process "logs" {
+	forward_to = [loki.echo.debug.receiver]
+
+    stage.multiline {
+        firstline = "^=================="
+		lastline = "^=================="
+	}
+
+	//stage.multiline {
+        //firstline = "^panic: "
+		//lastline = "^\\d{4}/\\d{2}/\\d{2} \\d{2}:\\d{2}:\\d{2} "
+	//}
+}
+
+loki.echo "debug" { }
+
+otelcol.storage.file "default" {}
+
+otelcol.receiver.filelog "default" {
+    include = ["/tmp/logs2/*.log"]
+    storage = otelcol.storage.file.default.handler
+    operators = [{
+      type = "regex_parser",
+      regex = "^(?P<timestamp>[^ ]+)",
+      timestamp = {
+        parse_from = "attributes.timestamp",
+        layout = "%Y-%m-%dT%H:%M:%S.%fZ",
+        location = "UTC",
+      },
+    }]
+    output {
+        logs = [otelcol.exporter.debug.default.input]
+    }
+}
+
+otelcol.exporter.loki "default" {
+    forward_to = [loki.echo.debug.receiver]
+}

@@ -1,0 +1,40 @@
+2025/11/21 21:44:48 running
+2025/11/21 21:44:48 running
+2025/11/21 21:44:48 running
+==================
+WARNING: DATA RACE
+Write at 0x000104ff3228 by goroutine 8:
+  main.runmain.func1()
+      github.com/narqo/playgroud-go/traceback/main.go:33 +0x70
+
+Previous write at 0x000104ff3228 by goroutine 9:
+  main.runmain.func1()
+      github.com/narqo/playgroud-go/traceback/main.go:33 +0x70
+
+Goroutine 8 (running) created at:
+  main.runmain()
+      github.com/narqo/playgroud-go/traceback/main.go:30 +0x70
+  main.main()
+      github.com/narqo/playgroud-go/traceback/main.go:21 +0x3c
+
+Goroutine 9 (running) created at:
+  main.runmain()
+      github.com/narqo/playgroud-go/traceback/main.go:30 +0x70
+  main.main()
+      github.com/narqo/playgroud-go/traceback/main.go:21 +0x3c
+==================
+2025/11/21 21:44:49 worker 1 running
+2025/11/21 21:44:49 running
+2025/11/21 21:44:49 worker 0 running
+2025/11/21 21:44:49 worker 0 running
+2025/11/21 21:44:49 running
+panic: worker 1: something went
+	 very
+	 wrong
+
+goroutine 20 [running]:
+main.runmain.func1()
+	github.com/narqo/playgroud-go/traceback/main.go:39 +0x1d4
+created by main.runmain in goroutine 1
+	github.com/narqo/playgroud-go/traceback/main.go:30 +0x74
+exit status 2
